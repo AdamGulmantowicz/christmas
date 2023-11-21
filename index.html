@@ -318,6 +318,26 @@
     </div>
 
     <script>
+      function shuffle(array) {
+        let currentIndex = array.length,
+          randomIndex;
+
+        // While there remain elements to shuffle.
+        while (currentIndex > 0) {
+          // Pick a remaining element.
+          randomIndex = Math.floor(Math.random() * currentIndex);
+          currentIndex--;
+
+          // And swap it with the current element.
+          [array[currentIndex], array[randomIndex]] = [
+            array[randomIndex],
+            array[currentIndex],
+          ];
+        }
+
+        return array;
+      }
+
       const familyCodes = {
         1234: "Adam",
         2345: "Ewa",
@@ -328,10 +348,10 @@
 
       const shuffledFamily = [
         { id: "7664", name: "UGlvdHI=" },
-        { id: "4231", name: "VG9tZWs=" },
-        { id: "9242", name: "TWFtYQ==" },
         { id: "2345", name: "RXdh" },
         { id: "1234", name: "QWRhbQ==" },
+        { id: "9242", name: "TWFtYQ==" },
+        { id: "4231", name: "VG9tZWs=" },
       ];
 
       const getPersonAndWhoToGive = (value) => {
