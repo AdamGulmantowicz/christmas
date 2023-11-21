@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        background-color: #111;
+      }
+
+      input {
+        width: 100px;
+        outline: none;
+        text-align: center;
+        margin: 4px 0;
+      }
+
+      canvas {
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+      }
+      @import url(https://fonts.googleapis.com/css?family=Shadows+Into+Light+Two);
+      .cracker {
+        width: 40.625em;
+        height: 6.25em;
+        margin: 6.25em auto 0;
+        position: relative;
+        cursor: pointer;
+      }
+      .cracker:hover .cracker-left {
+        left: -7.5em;
+        top: 3.125em;
+        transform: rotate(-15deg);
+      }
+      .cracker:hover .cracker-right {
+        right: -7.5em;
+        top: 3.125em;
+        transform: rotate(15deg);
+      }
+
+      .cracker-left,
+      .cracker-right {
+        transition: all 0.5s ease-in-out;
+        width: 50%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        background-color: #da1d1b;
+      }
+
+      .cracker-left {
+        left: 0;
+      }
+
+      .cracker-right {
+        right: 0;
+      }
+
+      .cracker-left-inner,
+      .cracker-right-inner {
+        position: relative;
+        height: 100%;
+        width: 100%;
+      }
+      .cracker-left-inner:before,
+      .cracker-right-inner:before {
+        content: "";
+        height: 100%;
+        width: 0.625em;
+        background-color: #ad1715;
+        position: absolute;
+        z-index: 10;
+        border-radius: 50%;
+      }
+
+      .cracker-left-inner:before {
+        left: -0.3125em;
+        top: 0;
+      }
+
+      .cracker-right-inner:before {
+        right: -0.3125em;
+        top: 0;
+      }
+
+      .cracker-message {
+        padding: 0.9375em 0;
+        width: 25%;
+        margin: 0 auto;
+      }
+      .cracker-message .cracker-message__inner {
+        padding: 0.625em;
+        background: #ececec;
+        color: #6c6c6c;
+        text-align: center;
+        font-size: 0.8125em;
+        text-transform: uppercase;
+        font-weight: bold;
+        font-family: "Shadows Into Light Two", cursive;
+        border: 1px solid #d7d7d7;
+        box-shadow: 2px 2px 30px #d2d2d2;
+      }
+
+      .cracker-left__tail,
+      .cracker-left__end,
+      .cracker-left__body,
+      .cracker-right__tail,
+      .cracker-right__end,
+      .cracker-right__body,
+      .cracker-left__mask-top,
+      .cracker-left__mask-bottom,
+      .cracker-right__mask-top,
+      .cracker-right__mask-bottom {
+        position: absolute;
+      }
+
+      .cracker-left__tail {
+        left: 0;
+      }
+
+      .cracker-right__tail {
+        right: 0;
+      }
+
+      .cracker-left__tail,
+      .cracker-right__tail {
+        width: 6.25em;
+        height: 100%;
+        background-color: #e74241;
+      }
+
+      .cracker-left__end,
+      .cracker-right__end {
+        width: 1.25em;
+        height: 100%;
+        background-color: #ad1715;
+      }
+      .cracker-left__end:before,
+      .cracker-right__end:before {
+        content: "";
+        height: 3.4375em;
+        width: 0.9375em;
+        background-color: #ffb20f;
+        position: absolute;
+        top: 1.3125em;
+        z-index: 15;
+        border: 0.0625em solid #f5a600;
+        border-radius: 0.3125em;
+      }
+
+      .cracker-left__end {
+        left: 6.25em;
+      }
+      .cracker-left__end:before {
+        left: -0.625em;
+      }
+
+      .cracker-right__end {
+        right: 6.25em;
+      }
+      .cracker-right__end:before {
+        right: -0.625em;
+      }
+
+      .cracker-left__mask-top,
+      .cracker-left__mask-bottom,
+      .cracker-right__mask-top,
+      .cracker-right__mask-bottom {
+        z-index: 10;
+      }
+
+      .cracker-left__mask-top,
+      .cracker-left__mask-bottom,
+      .cracker-right__mask-top,
+      .cracker-right__mask-bottom {
+        width: 8.75em;
+        height: 1.5625em;
+      }
+
+      .cracker-left__mask-top,
+      .cracker-left__mask-bottom {
+        left: 1.875em;
+      }
+
+      .cracker-right__mask-top,
+      .cracker-right__mask-bottom {
+        right: 1.875em;
+      }
+
+      .cracker-right__mask-bottom,
+      .cracker-left__mask-top {
+        height: 0;
+        width: 0;
+        border-left: 4.375em solid transparent;
+        border-right: 2.375em solid transparent;
+        border-top: 4.375em solid white;
+      }
+
+      .cracker-right__mask-top,
+      .cracker-left__mask-bottom {
+        height: 0;
+        width: 0;
+        border-left: 4.375em solid transparent;
+        border-right: 2.375em solid transparent;
+        border-bottom: 4.375em solid white;
+      }
+
+      .cracker-left__mask-top,
+      .cracker-right__mask-top {
+        top: -2.1875em;
+      }
+
+      .cracker-right__mask-top {
+        transform: rotate(-180deg);
+      }
+
+      .cracker-right__mask-bottom {
+        transform: rotate(-180deg);
+      }
+
+      .cracker-left__mask-bottom,
+      .cracker-right__mask-bottom {
+        bottom: -2.1875em;
+      }
+
+      .cracker-left-zigzag {
+        position: absolute;
+        right: -1px;
+        top: 0;
+        height: 100%;
+      }
+      .cracker-left-zigzag .cracker-left-zigzag__item {
+        height: 0;
+        width: 0;
+        border-bottom: 0.625em solid transparent;
+        border-right: 0.625em solid white;
+        border-top: 0.625em solid transparent;
+      }
+
+      .cracker-right-zigzag {
+        position: absolute;
+        left: -0.625em;
+        top: 0;
+        height: 100%;
+      }
+      .cracker-right-zigzag .cracker-right-zigzag__item {
+        height: 0;
+        width: 0;
+        border-bottom: 0.625em solid transparent;
+        border-right: 0.625em solid #da1d1b;
+        border-top: 0.625em solid transparent;
+      }
+
+      .hover-me-text {
+        text-align: center;
+        margin-top: 3.125em;
+        font-family: "Shadows Into Light Two", cursive;
+        text-transform: uppercase;
+        /*   text-decoration: underline; */
+      }
+    </style>
+    <title>Losowanie prezentów na święta</title>
+  </head>
+  <body>
+    <canvas></canvas>
+    <div class="cracker" id="cracker">
+      <div class="cracker-message">
+        <div class="cracker-message__inner">
+          <form id="form">
+            Podaj swój kod
+            <input
+              name="code"
+              type="text"
+              placeholder="Np. Tutaj wpisz kod..."
+            />
+
+            <button type="submit">Sprawdź!</button>
+          </form>
+
+          <div id="result"></div>
+        </div>
+      </div>
+      <div class="cracker-left">
+        <div class="cracker-left-inner">
+          <div class="cracker-left__mask-top"></div>
+          <div class="cracker-left__mask-bottom"></div>
+          <div class="cracker-left__tail"></div>
+          <div class="cracker-left__end"></div>
+          <div class="cracker-left__body"></div>
+          <div class="cracker-left-zigzag">
+            <div class="cracker-left-zigzag__item"></div>
+            <div class="cracker-left-zigzag__item"></div>
+            <div class="cracker-left-zigzag__item"></div>
+            <div class="cracker-left-zigzag__item"></div>
+            <div class="cracker-left-zigzag__item"></div>
+          </div>
+        </div>
+      </div>
+      <div class="cracker-right">
+        <div class="cracker-right-inner">
+          <div class="cracker-right__mask-top"></div>
+          <div class="cracker-right__mask-bottom"></div>
+          <div class="cracker-right__tail"></div>
+          <div class="cracker-right__end"></div>
+          <div class="cracker-right__body"></div>
+          <div class="cracker-right-zigzag">
+            <div class="cracker-right-zigzag__item"></div>
+            <div class="cracker-right-zigzag__item"></div>
+            <div class="cracker-right-zigzag__item"></div>
+            <div class="cracker-right-zigzag__item"></div>
+            <div class="cracker-right-zigzag__item"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const familyCodes = {
+        1234: "Adam",
+        2345: "Ewa",
+        4231: "Tomek",
+        7664: "Piotr",
+        9242: "Mama",
+      };
+
+      const shuffledFamily = [
+        { id: "7664", name: "UGlvdHI=" },
+        { id: "4231", name: "VG9tZWs=" },
+        { id: "9242", name: "TWFtYQ==" },
+        { id: "2345", name: "RXdh" },
+        { id: "1234", name: "QWRhbQ==" },
+      ];
+
+      const getPersonAndWhoToGive = (value) => {
+        const index = shuffledFamily.findIndex((item) => item.id === value);
+        const authedPerson = shuffledFamily[index];
+        const indexOfPresent = index + 1;
+        if (indexOfPresent === shuffledFamily.length) {
+          return {
+            name: atob(authedPerson.name),
+            personToBuy: atob(shuffledFamily[0].name),
+          };
+        }
+
+        return {
+          name: atob(authedPerson.name),
+          personToBuy: atob(shuffledFamily[indexOfPresent].name),
+        };
+      };
+
+      const formEl = document.getElementById("form");
+      const resultEl = document.getElementById("result");
+
+      formEl.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(formEl);
+
+        const code = formData.get("code");
+        formEl.style.display = "none";
+
+        const data = getPersonAndWhoToGive(code);
+        resultEl.insertAdjacentHTML(
+          "afterbegin",
+          /* html */ `
+          Witaj ${data.name}!
+          <br>
+          Wylosowałeś: ${data.personToBuy}
+        `
+        );
+      });
+    </script>
+
+    <script>
+      "use strict";
+
+      const canvas = document.querySelector("canvas");
+      const ctx = canvas.getContext("2d");
+
+      let width, height, lastNow;
+      let snowflakes;
+      const maxSnowflakes = 100;
+
+      function init() {
+        snowflakes = [];
+        resize();
+        render((lastNow = performance.now()));
+      }
+
+      function render(now) {
+        requestAnimationFrame(render);
+
+        const elapsed = now - lastNow;
+        lastNow = now;
+
+        ctx.clearRect(0, 0, width, height);
+        if (snowflakes.length < maxSnowflakes) snowflakes.push(new Snowflake());
+
+        ctx.fillStyle = ctx.strokeStyle = "#fff";
+
+        snowflakes.forEach((snowflake) => snowflake.update(elapsed, now));
+      }
+
+      function pause() {
+        cancelAnimationFrame(render);
+      }
+      function resume() {
+        lastNow = performance.now();
+        requestAnimationFrame(render);
+      }
+
+      class Snowflake {
+        constructor() {
+          this.spawn();
+        }
+
+        spawn(anyY = false) {
+          this.x = rand(0, width);
+          this.y = anyY === true ? rand(-50, height + 50) : rand(-50, -10);
+          this.xVel = rand(-0.05, 0.05);
+          this.yVel = rand(0.02, 0.1);
+          this.angle = rand(0, Math.PI * 2);
+          this.angleVel = rand(-0.001, 0.001);
+          this.size = rand(7, 12);
+          this.sizeOsc = rand(0.01, 0.5);
+        }
+
+        update(elapsed, now) {
+          const xForce = rand(-0.001, 0.001);
+
+          if (Math.abs(this.xVel + xForce) < 0.075) {
+            this.xVel += xForce;
+          }
+
+          this.x += this.xVel * elapsed;
+          this.y += this.yVel * elapsed;
+          this.angle += this.xVel * 0.05 * elapsed; //this.angleVel * elapsed
+
+          if (
+            this.y - this.size > height ||
+            this.x + this.size < 0 ||
+            this.x - this.size > width
+          ) {
+            this.spawn();
+          }
+
+          this.render();
+        }
+
+        render() {
+          ctx.save();
+          const { x, y, angle, size } = this;
+          ctx.beginPath();
+          ctx.arc(x, y, size * 0.2, 0, Math.PI * 2, false);
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+
+      // Utils
+      const rand = (min, max) => min + Math.random() * (max - min);
+
+      function resize() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      }
+
+      window.addEventListener("resize", resize);
+      window.addEventListener("blur", pause);
+      window.addEventListener("focus", resume);
+      init();
+    </script>
+  </body>
+</html>
